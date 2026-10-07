@@ -145,7 +145,9 @@ class Install(unittest.TestCase):
         outside.write_text("keep", encoding="utf-8")
         for key in ("../keep.txt", "replica-build/../../keep.txt",
                     "/replica-build/x", "replica-build\\..\\keep.txt",
-                    "replica-build/x:stream", "replica-build//x"):
+                    "replica-build/x:stream", "replica-build//x",
+                    "replica-build/.. /.. /keep.txt", "replica-build/file.",
+                    "replica-build/null\u0000.txt"):
             record = {"package": installer.PACKAGE, "schema": 1,
                       "files": {key: "0" * 64}}
             (self.dest / installer.MANIFEST).write_text(json.dumps(record), encoding="utf-8")

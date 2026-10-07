@@ -84,7 +84,9 @@ def safe_key(key):
         raise InstallError("Invalid manifest path")
     parts = PurePosixPath(key).parts
     if (len(parts) < 2 or parts[0] not in SKILLS or ".." in parts
-            or "\\" in key or ":" in key or PurePosixPath(key).as_posix() != key):
+            or "\\" in key or ":" in key or PurePosixPath(key).as_posix() != key
+            or any(part.endswith((" ", ".")) for part in parts)
+            or any(ord(char) < 32 for char in key)):
         raise InstallError("Invalid manifest path: %s" % key)
     return key
 
@@ -220,7 +222,7 @@ def main(argv=None):
         return 1
     print("%s%s: %d files at %s" % (
         "Would " if args.dry_run else "", args.action, count, dest))
-    if args.action == "install":
+    if args.action == "install" and not args.dry_run:
         print("Open/reload the target agent, then ask it to use replica-recon.")
         if args.host == "portable":
             print("Load %s/replica-recon/SKILL.md explicitly; this path has no native discovery." % dest)
