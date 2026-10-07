@@ -12,14 +12,35 @@ description: >-
 
 # replica-brand
 
+## Running on any agent
+
+Use this skill with the host's native skill loader, or read this `SKILL.md`
+explicitly. References such as `/replica-design` name another skill: use its
+native invocation (for example `$replica-design` in Codex), or load that
+sibling's `SKILL.md`. They are not shell commands. Continue stages only within
+the user's requested scope.
+
+Keep the working directory at the user's app project. All `replica/` paths
+refer to that project; templates and Python scripts belong to the skill pack.
+In command examples, replace `<PACK_ROOT>` with the absolute directory
+containing the eleven `replica-*` skill folders (the parent of this skill's
+folder). Keep script paths quoted. Use an available Python 3.8+ interpreter:
+`python`, `python3`, or `py -3` on Windows. Create output directories first.
+
+Use the host's available file, terminal, web and browser tools. If a required
+capability is unavailable, record what was not run and provide the concrete
+manual step; never invent observations, screenshots, reviews or passing tests.
+A chat without file/terminal access can follow the method but cannot execute
+the Python tools. Preserve the rules and user approval gates below.
+
 Nothing launches under the original's identity. This skill is the line
 between "a clone" and "your app".
 
 Tool in this folder:
 
 ```bash
-python3 sweep.py . --avoid "Original Name,Its Company" --domains original.com --colors "#006bff"
-python3 sweep.py . --config replica/brand.json        # same, from the brand file
+python "<PACK_ROOT>/replica-brand/sweep.py" . --avoid "Original Name,Its Company" --domains original.com --colors "#006bff"
+python "<PACK_ROOT>/replica-brand/sweep.py" . --config replica/brand.json        # same, from the brand file
 ```
 
 Writes `replica/brand.md` and `replica/brand.json` (`avoid`, `domains`,
@@ -63,7 +84,7 @@ Pick a primary brand hue from a different family than the original's (if
 theirs is blue, yours is not a nearby blue). Then:
 
 ```bash
-python3 ../replica-design/contrast.py replica/design/tokens.json
+python "<PACK_ROOT>/replica-design/contrast.py" replica/design/tokens.json
 ```
 
 Zero AA failures. Add the original's brand colours to `brand.json` so the
@@ -94,7 +115,7 @@ error) in that voice. All fresh, none echoing the original's phrasing.
 Replace every placeholder name, colour and string. Then:
 
 ```bash
-python3 sweep.py . --config replica/brand.json
+python "<PACK_ROOT>/replica-brand/sweep.py" . --config replica/brand.json
 ```
 
 It searches file contents and file names for the original's name (also inside

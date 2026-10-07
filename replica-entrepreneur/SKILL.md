@@ -13,13 +13,34 @@ description: >-
 
 # replica-entrepreneur
 
+## Running on any agent
+
+Use this skill with the host's native skill loader, or read this `SKILL.md`
+explicitly. References such as `/replica-design` name another skill: use its
+native invocation (for example `$replica-design` in Codex), or load that
+sibling's `SKILL.md`. They are not shell commands. Continue stages only within
+the user's requested scope.
+
+Keep the working directory at the user's app project. All `replica/` paths
+refer to that project; templates and Python scripts belong to the skill pack.
+In command examples, replace `<PACK_ROOT>` with the absolute directory
+containing the eleven `replica-*` skill folders (the parent of this skill's
+folder). Keep script paths quoted. Use an available Python 3.8+ interpreter:
+`python`, `python3`, or `py -3` on Windows. Create output directories first.
+
+Use the host's available file, terminal, web and browser tools. If a required
+capability is unavailable, record what was not run and provide the concrete
+manual step; never invent observations, screenshots, reviews or passing tests.
+A chat without file/terminal access can follow the method but cannot execute
+the Python tools. Preserve the rules and user approval gates below.
+
 A straight copy of an app has no reason to exist. This skill finds the reason:
 what the original's users hate, in their own words, and fixes it in yours.
 
 Tool in this folder:
 
 ```bash
-python3 reviews.py replica/reviews.csv --out replica/feedback.md
+python "<PACK_ROOT>/replica-entrepreneur/reviews.py" replica/reviews.csv --out replica/feedback.md
 ```
 
 ## The rules, which are not negotiable
@@ -62,7 +83,7 @@ best fixes hide.
 ## Step 2: rank
 
 ```bash
-python3 reviews.py replica/reviews.csv --out replica/feedback.md
+python "<PACK_ROOT>/replica-entrepreneur/reviews.py" replica/reviews.csv --out replica/feedback.md
 ```
 
 It sorts reviews into themes (`themes.json`, edit it for the app's category),

@@ -12,13 +12,34 @@ description: >-
 
 # replica-diff
 
+## Running on any agent
+
+Use this skill with the host's native skill loader, or read this `SKILL.md`
+explicitly. References such as `/replica-design` name another skill: use its
+native invocation (for example `$replica-design` in Codex), or load that
+sibling's `SKILL.md`. They are not shell commands. Continue stages only within
+the user's requested scope.
+
+Keep the working directory at the user's app project. All `replica/` paths
+refer to that project; templates and Python scripts belong to the skill pack.
+In command examples, replace `<PACK_ROOT>` with the absolute directory
+containing the eleven `replica-*` skill folders (the parent of this skill's
+folder). Keep script paths quoted. Use an available Python 3.8+ interpreter:
+`python`, `python3`, or `py -3` on Windows. Create output directories first.
+
+Use the host's available file, terminal, web and browser tools. If a required
+capability is unavailable, record what was not run and provide the concrete
+manual step; never invent observations, screenshots, reviews or passing tests.
+A chat without file/terminal access can follow the method but cannot execute
+the Python tools. Preserve the rules and user approval gates below.
+
 Two tools in this folder, both standard-library Python, no installs:
 
 ```bash
-python3 parity.py replica/features.csv                         # feature parity + missing list
-python3 imgdiff.py replica/screens/S07.png replica/clone-screens/S07.png --out diff-S07.png
-python3 imgdiff.py a.png b.png --json > replica/diffs/S07.json # for parity.py --visual
-python3 parity.py replica/features.csv --visual replica/diffs/*.json --markdown > replica/parity.md
+python "<PACK_ROOT>/replica-diff/parity.py" replica/features.csv                         # feature parity + missing list
+python "<PACK_ROOT>/replica-diff/imgdiff.py" replica/screens/S07.png replica/clone-screens/S07.png --out diff-S07.png
+python "<PACK_ROOT>/replica-diff/imgdiff.py" a.png b.png --json > replica/diffs/S07.json # for parity.py --visual
+python "<PACK_ROOT>/replica-diff/parity.py" replica/features.csv --visual replica/diffs/S07.json replica/diffs/S08.json --markdown > replica/parity.md
 ```
 
 ## What parity means here
@@ -37,7 +58,7 @@ Make sure `replica/features.csv` is current: every row's `clone` column is
 `yes`, `partial` (with a note), `no`, or `skip` (with a reason). Then:
 
 ```bash
-python3 parity.py replica/features.csv
+python "<PACK_ROOT>/replica-diff/parity.py" replica/features.csv
 ```
 
 It weights must 3, should 2, could 1, counts partial as half, leaves out
@@ -54,7 +75,7 @@ user's own account, saved in `replica/screens/`. The clone's go in
 `replica/clone-screens/`.
 
 ```bash
-python3 imgdiff.py replica/screens/S07.png replica/clone-screens/S07.png --out replica/diffs/S07.png
+python "<PACK_ROOT>/replica-diff/imgdiff.py" replica/screens/S07.png replica/clone-screens/S07.png --out replica/diffs/S07.png
 ```
 
 Layout mode (default) turns both into edge maps, cuts them into a grid, and

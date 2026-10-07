@@ -12,6 +12,27 @@ description: >-
 
 # replica-deploy
 
+## Running on any agent
+
+Use this skill with the host's native skill loader, or read this `SKILL.md`
+explicitly. References such as `/replica-design` name another skill: use its
+native invocation (for example `$replica-design` in Codex), or load that
+sibling's `SKILL.md`. They are not shell commands. Continue stages only within
+the user's requested scope.
+
+Keep the working directory at the user's app project. All `replica/` paths
+refer to that project; templates and Python scripts belong to the skill pack.
+In command examples, replace `<PACK_ROOT>` with the absolute directory
+containing the eleven `replica-*` skill folders (the parent of this skill's
+folder). Keep script paths quoted. Use an available Python 3.8+ interpreter:
+`python`, `python3`, or `py -3` on Windows. Create output directories first.
+
+Use the host's available file, terminal, web and browser tools. If a required
+capability is unavailable, record what was not run and provide the concrete
+manual step; never invent observations, screenshots, reviews or passing tests.
+A chat without file/terminal access can follow the method but cannot execute
+the Python tools. Preserve the rules and user approval gates below.
+
 Reads everything in `replica/`. Writes `replica/deploy.md` (the checklist in
 `preflight.md` in this folder, filled in).
 
@@ -19,8 +40,8 @@ Reads everything in `replica/`. Writes `replica/deploy.md` (the checklist in
 
 - **Nothing goes live without the user's go.** Show the preflight results and
   ask.
-- **The user buys and signs in.** Claude never buys a domain, enters a card,
-  types a password or pastes a live key. Claude writes the exact DNS records,
+- **The user buys and signs in.** The agent never buys a domain, enters a card,
+  types a password or pastes a live key. The agent writes the exact DNS records,
   env var names and commands; the user does the account steps.
 - **Not until it is rebranded.** The sweep must be clean. No exceptions.
 
@@ -30,15 +51,14 @@ Run every check and paste the results into `deploy.md`:
 
 ```bash
 npx playwright test                                                  # replica-test
-python3 ../replica-diff/parity.py replica/features.csv               # must-haves done
-python3 ../replica-brand/sweep.py . --config replica/brand.json      # exit 0: clean
-python3 ../replica-launch/listing.py replica/launch/listing.json     # if shipping to stores
+python "<PACK_ROOT>/replica-diff/parity.py" replica/features.csv               # must-haves done
+python "<PACK_ROOT>/replica-brand/sweep.py" . --config replica/brand.json      # exit 0: clean
+python "<PACK_ROOT>/replica-launch/listing.py" replica/launch/listing.json     # if shipping to stores
 npm run build                                                        # production build passes
 ```
 
-(Paths are relative to wherever the pack is installed. Under
-`~/.claude/skills/` that is `~/.claude/skills/replica-diff/parity.py` and so
-on.)
+Resolve `<PACK_ROOT>` as described above; keep the working directory at
+the app project when running the preflight.
 
 Plus by hand: no open S1 or S2 bugs, privacy policy and terms pages live
 (listing every processor), cookie banner if you use non-essential cookies in

@@ -19,7 +19,8 @@ case and in short form (#06f matches #0066ff). File and folder names are
 checked as well as contents.
 
 Skipped: .git, node_modules, build output folders, lock files, binary files,
-and the replica/ planning folder (where the original's name belongs). Pass
+the root agent skill installation folders, and the replica/ planning folder
+(where the original's name belongs). Pass
 --include-replica to check that too, for example if it sits inside public/.
 """
 
@@ -34,6 +35,8 @@ SKIP_DIRS = {".git", "node_modules", ".next", ".nuxt", ".svelte-kit", "dist", "b
              "venv", "Pods", ".expo", "DerivedData", ".gradle"}
 SKIP_FILES = {"package-lock.json", "yarn.lock", "pnpm-lock.yaml", "bun.lockb",
               "Podfile.lock", "Cargo.lock", "poetry.lock"}
+SKILL_DIRS = {".agents/skills", ".claude/skills", ".opencode/skills",
+              ".cursor/skills", ".gemini/skills", ".github/skills", ".replica-skills"}
 BINARY_EXT = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".ico", ".icns", ".pdf", ".zip",
               ".gz", ".woff", ".woff2", ".ttf", ".otf", ".eot", ".mp4", ".mov", ".mp3",
               ".wav", ".avif", ".heic", ".psd", ".sketch", ".fig", ".jar", ".so", ".dylib"}
@@ -84,6 +87,9 @@ def sweep(root, avoid=(), domains=(), colors=(), include_replica=False, max_size
         keep = []
         for d in dirnames:
             if d in SKIP_DIRS:
+                continue
+            relative = os.path.relpath(os.path.join(dirpath, d), root).replace(os.sep, "/")
+            if relative in SKILL_DIRS:
                 continue
             if d == "replica" and rel_dir == "." and not include_replica:
                 continue

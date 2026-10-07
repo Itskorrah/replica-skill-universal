@@ -11,6 +11,27 @@ description: >-
 
 # replica-backend
 
+## Running on any agent
+
+Use this skill with the host's native skill loader, or read this `SKILL.md`
+explicitly. References such as `/replica-design` name another skill: use its
+native invocation (for example `$replica-design` in Codex), or load that
+sibling's `SKILL.md`. They are not shell commands. Continue stages only within
+the user's requested scope.
+
+Keep the working directory at the user's app project. All `replica/` paths
+refer to that project; templates and Python scripts belong to the skill pack.
+In command examples, replace `<PACK_ROOT>` with the absolute directory
+containing the eleven `replica-*` skill folders (the parent of this skill's
+folder). Keep script paths quoted. Use an available Python 3.8+ interpreter:
+`python`, `python3`, or `py -3` on Windows. Create output directories first.
+
+Use the host's available file, terminal, web and browser tools. If a required
+capability is unavailable, record what was not run and provide the concrete
+manual step; never invent observations, screenshots, reviews or passing tests.
+A chat without file/terminal access can follow the method but cannot execute
+the Python tools. Preserve the rules and user approval gates below.
+
 Reads `replica/architecture.md`. Writes migrations and server code, and keeps
 `replica/backend.md` (checklist below) up to date.
 
@@ -19,10 +40,10 @@ Reads `replica/architecture.md`. Writes migrations and server code, and keeps
 - **Official, public APIs only, with the user's own keys.** Never call the
   original app's private endpoints, never reuse its OAuth client, never proxy
   through it.
-- **The user creates accounts and keys.** Claude never signs up for services,
+- **The user creates accounts and keys.** The agent never signs up for services,
   never types a password, card or live key. The user creates the Stripe,
   Supabase, Resend or Google Cloud project and puts keys in `.env.local`.
-  Claude writes `.env.example` with every variable name and no values.
+  The agent writes `.env.example` with every variable name and no values.
 - **Test mode first.** Stripe test keys and test cards until replica-deploy.
 
 ## Auth

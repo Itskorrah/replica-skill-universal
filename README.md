@@ -1,7 +1,16 @@
-# The Replica skill
+# The Replica skill - Universal
 
-Eleven Claude skills that clone any app. Free, MIT, no signup, no API key,
-nothing to connect.
+Eleven agent skills that clone any app. Works with Codex, Claude Code,
+Antigravity, OpenCode, Cursor, Gemini CLI, GitHub Copilot, and other agents
+through portable Markdown instructions. Free, MIT; no Replica account,
+subscription or API key required. Your chosen agent and app services may
+have their own requirements.
+
+This fork preserves the original eleven skills, six Python tools, templates,
+`replica/` outputs, clean-room rules and deployment approval. It adds portable
+instructions, a cross-platform installer, and compatibility checks. See
+[compatibility and verification](docs/compatibility.md) for supported paths
+and the distinction between automated checks and pending live host sessions.
 
 One reverse-engineers the app you want to clone. One rebuilds it. One tests it
 for bugs. And one is the Entrepreneur: it reads what the app's users hate and
@@ -18,36 +27,94 @@ fine print is at the bottom, and the skills enforce it.
 
 ## Install
 
-Paste this into Claude:
+Clone this fork, then run the standard-library Python installer. These commands
+work in PowerShell and POSIX shells; use `python3` or `py -3` if that is your
+Python 3 command. Python 3.8+ is required. Nothing to pip install.
 
+```text
+git clone https://github.com/Itskorrah/replica-skill-universal.git
+cd replica-skill-universal
+python scripts/install.py install --host codex --project "/path/to/my app"
 ```
-https://github.com/Jakeschincariol/replica-skill
 
-install skill
+Replace the project path with your app directory, for example `"C:/work/My App"`
+on Windows. The command installs **all eleven skills, tools and templates**
+into that app's `.agents/skills/`. Run the skills while working in the app
+project, not in this pack's checkout.
+
+Choose a host with `--host`: `codex`, `claude`, `antigravity`, `antigravity-cli`,
+`opencode`, `cursor`, `gemini`, `copilot`, `agents`, or `portable`. For example:
+
+```text
+python scripts/install.py install --host antigravity --project "/path/to/my app"
+python scripts/install.py install --host opencode --project "/path/to/my app"
 ```
 
-Or as a plugin, in Claude Code:
+Codex and Antigravity share `.agents/skills/` in project scope, so install once
+for both. `--host agents` also serves current OpenCode, Cursor, Gemini CLI and
+Copilot versions that recognize this shared directory. Prefer one installation
+to duplicate copies. See the [full path table](docs/compatibility.md).
 
+For skills available across local projects on your machine:
+
+```text
+python scripts/install.py install --host codex --scope global
 ```
-/plugin marketplace add Jakeschincariol/replica-skill
+
+The installer copies files only. It does not configure agents, install
+browsers, change permissions, choose a model, or start the Replica workflow.
+It retains the MIT licence in every installed skill. Reload your agent's skills
+or start a new session after installation.
+
+### Start a skill
+
+- **Codex:** `$replica-recon` followed by the target URL and scope.
+- **Claude Code:** `/replica-recon` for a folder installation.
+- **Antigravity, OpenCode, Cursor, Gemini CLI, Copilot:** ask the agent to
+  `Use the replica-recon skill to map [URL] for [scope]`. Confirm it loads the
+  skill. OpenCode uses its native skill tool; slash commands vary by host.
+- **Other agents or ordinary chat:** follow [portable use](docs/portable.md).
+  Load or paste a `SKILL.md` explicitly. Tool execution requires an environment
+  with file and terminal access.
+
+The `/replica-*` notation below is the original Claude invocation. Elsewhere,
+use the same skill name through your host's loader, Codex's `$` invocation, or
+an explicit file read. It is never a terminal command.
+
+### Update and remove
+
+After pulling updates in this checkout, rerun the same install command.
+Preview changes with `--dry-run`. Updates and removals refuse to overwrite or
+remove locally edited managed files; move or preserve those edits first.
+Existing unmanaged skill folders are refused rather than adopted. User-added
+files and unrelated skills are retained. A `.replica-install.json` checksum
+manifest records ownership in the installation directory; keep it with the pack.
+Each file is replaced atomically, but the full pack update is not a transaction;
+keep a backup before updating an installation you have customized.
+
+```text
+python scripts/install.py install --host codex --project "/path/to/my app" --dry-run
+python scripts/install.py uninstall --host codex --project "/path/to/my app"
+```
+
+Use the same host and scope for removal as for installation. Removing a shared
+`.agents/skills/` pack removes that copy for every host that uses it. `replica/`
+app outputs are never removed. Symbolic links and junctions in managed paths
+are refused; choose an ordinary directory.
+
+### Claude Code plugin
+
+The original plugin interface remains available, now pointing at this fork:
+
+```text
+/plugin marketplace add Itskorrah/replica-skill-universal
 /plugin install replica-skill@replica-skill
 ```
 
-Claude Code namespaces plugin skills, so installed as a plugin they show up as
-`/replica-skill:replica-recon` and so on. Copy the folders instead if you want
-plain `/replica-recon`:
-
-```bash
-git clone https://github.com/Jakeschincariol/replica-skill.git
-cp -r replica-skill/replica-* ~/.claude/skills/
-```
-
-Project-local instead of global: copy the same folders into your repo's
-`.claude/skills/`. No Claude Code at all? Paste any single `SKILL.md` at the
-top of a chat and it runs as a mode. You lose the Python tools, but the
-method works.
-
-The tools need Python 3.8 or newer. Nothing to pip install.
+Plugin skills use `/replica-skill:replica-recon` and the corresponding names
+for the other stages. Choose the plugin or a folder install, to avoid duplicates.
+For manual installation on any host, copy the eleven complete `replica-*`
+folders and the MIT licence into its documented skills directory.
 
 ## The eleven
 
@@ -120,13 +187,18 @@ are only thinking about cloning is a good way to find out if you should.
 
 Six of them, all standard-library Python. None touch the network.
 
+The examples below run from this checkout. When running against your app,
+keep its directory as the working directory and use quoted absolute paths to
+the installed scripts, as each skill explains. That keeps `replica/` inputs
+and outputs in your app. See [a Windows example](docs/portable.md).
+
 ```bash
-python3 replica-diff/imgdiff.py original.png clone.png --out diff.png   # layout diff, ignores colour
-python3 replica-diff/parity.py replica/features.csv                     # parity score + missing list
-python3 replica-entrepreneur/reviews.py replica/reviews.csv             # what users hate, ranked, linked
-python3 replica-design/contrast.py replica/design/tokens.json           # WCAG contrast on your tokens
-python3 replica-brand/sweep.py . --avoid "Original App"                 # anything of the original left?
-python3 replica-launch/listing.py replica/launch/listing.json           # store limits + copycat checks
+python replica-diff/imgdiff.py original.png clone.png --out diff.png   # layout diff, ignores colour
+python replica-diff/parity.py replica/features.csv                     # parity score + missing list
+python replica-entrepreneur/reviews.py replica/reviews.csv             # what users hate, ranked, linked
+python replica-design/contrast.py replica/design/tokens.json           # WCAG contrast on your tokens
+python replica-brand/sweep.py . --avoid "Original App"                 # anything of the original left?
+python replica-launch/listing.py replica/launch/listing.json           # store limits + copycat checks
 ```
 
 **`imgdiff.py`** reads PNGs with no libraries, turns both screenshots into
@@ -150,7 +222,7 @@ the title, wasted keyword characters, and the original's name anywhere in
 your listing.
 
 ```bash
-python3 -m unittest discover -s tests -v
+python -m unittest discover -s tests -v
 ```
 
 ## Fine print
@@ -199,7 +271,10 @@ replica-entrepreneur/  SKILL.md, reviews.py, themes.json
 replica-brand/         SKILL.md, sweep.py
 replica-launch/        SKILL.md, listing.py, listing.example.json
 replica-deploy/        SKILL.md, preflight.md
-tests/                 the tests for every tool
+scripts/install.py     cross-platform install, update and removal
+docs/                  compatibility evidence and portable use
+tests/                 tool, installation and integration tests
+.github/workflows/     Linux, Windows and macOS CI
 ```
 
 Your own files live in `replica/` in your project. The skills read each
@@ -207,7 +282,12 @@ other's.
 
 ## Credit
 
-Made by Jake Schincariol, [opusjake.ai](https://opusjake.ai). Siblings:
+Original Replica skill pack by Jake Schincariol, [opusjake.ai](https://opusjake.ai),
+from the [upstream repository](https://github.com/Jakeschincariol/replica-skill).
+Universal compatibility maintained in
+[Itskorrah/replica-skill-universal](https://github.com/Itskorrah/replica-skill-universal).
+
+Other skills by the original author:
 [Arena](https://github.com/Jakeschincariol/arena-skill),
 [X](https://github.com/Jakeschincariol/x-agent-skill),
 [LinkedIn](https://github.com/Jakeschincariol/linkedin-agent-skill),
