@@ -12,12 +12,33 @@ description: >-
 
 # replica-launch
 
+## Running on any agent
+
+Use this skill with the host's native skill loader, or read this `SKILL.md`
+explicitly. References such as `/replica-design` name another skill: use its
+native invocation (for example `$replica-design` in Codex), or load that
+sibling's `SKILL.md`. They are not shell commands. Continue stages only within
+the user's requested scope.
+
+Keep the working directory at the user's app project. All `replica/` paths
+refer to that project; templates and Python scripts belong to the skill pack.
+In command examples, replace `<PACK_ROOT>` with the absolute directory
+containing the eleven `replica-*` skill folders (the parent of this skill's
+folder). Keep script paths quoted. Use an available Python 3.8+ interpreter:
+`python`, `python3`, or `py -3` on Windows. Create output directories first.
+
+Use the host's available file, terminal, web and browser tools. If a required
+capability is unavailable, record what was not run and provide the concrete
+manual step; never invent observations, screenshots, reviews or passing tests.
+A chat without file/terminal access can follow the method but cannot execute
+the Python tools. Preserve the rules and user approval gates below.
+
 Reads `replica/fixes.md` (the angle and the evidence), `replica/brand.md`,
 and `replica/brand.json`. Writes `replica/launch/`: `landing.md`,
 `pricing.md`, `listing.json`, `launch-plan.md`.
 
 ```bash
-python3 listing.py replica/launch/listing.json      # limits, claims, the original's name
+python "<PACK_ROOT>/replica-launch/listing.py" replica/launch/listing.json      # limits, claims, the original's name
 ```
 
 Start from `listing.example.json` in this folder.
@@ -68,7 +89,7 @@ Copy in the brand voice. Run replica-design's contrast check on the page.
 Fill `listing.json`, then:
 
 ```bash
-python3 listing.py replica/launch/listing.json
+python "<PACK_ROOT>/replica-launch/listing.py" replica/launch/listing.json
 ```
 
 It checks App Store limits (name 30, subtitle 30, promotional text 170,

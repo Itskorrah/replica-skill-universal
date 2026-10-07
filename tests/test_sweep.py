@@ -62,6 +62,16 @@ class Sweep(unittest.TestCase):
         files = {h["file"] for h in self.run_sweep(include_replica=True)}
         self.assertIn(os.path.join("replica", "recon.md"), files)
 
+    def test_skips_root_skill_packs_but_checks_app_and_workflows(self):
+        for folder in sweep.SKILL_DIRS:
+            put(self.root, folder + "/replica-brand/SKILL.md", "Calendly #006bff")
+        put(self.root, ".github/workflows/deploy.yml", "name: Calendly")
+        put(self.root, "public/.agents/skills/example.md", "Calendly")
+        files = {h["file"].replace(os.sep, "/") for h in self.run_sweep()}
+        self.assertFalse(any(f.endswith("SKILL.md") for f in files))
+        self.assertIn(".github/workflows/deploy.yml", files)
+        self.assertIn("public/.agents/skills/example.md", files)
+
     def test_short_hex_matches_long(self):
         put(self.root, "src/a.css", "a { color: #06f }\n")
         hits = sweep.sweep(self.root, colors=["#0066FF"])

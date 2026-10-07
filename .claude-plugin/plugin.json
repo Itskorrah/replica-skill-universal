@@ -1,15 +1,19 @@
 {
   "name": "replica-skill",
-  "description": "Eleven free Claude skills that clone any app: reverse-engineer it, rebuild it, test it for bugs, then fix what its users hate. Free, MIT.",
-  "version": "1.0.0",
+  "description": "Eleven free agent skills that clone any app: reverse-engineer it, rebuild it, test it for bugs, then fix what its users hate. Free, MIT.",
+  "version": "1.1.0",
   "author": {
     "name": "Jake Schincariol",
     "url": "https://opusjake.ai"
   },
-  "homepage": "https://github.com/Jakeschincariol/replica-skill",
-  "repository": "https://github.com/Jakeschincariol/replica-skill",
+  "homepage": "https://github.com/Itskorrah/replica-skill-universal",
+  "repository": "https://github.com/Itskorrah/replica-skill-universal",
   "license": "MIT",
   "keywords": [
+    "agent-skills",
+    "codex",
+    "antigravity",
+    "opencode",
     "claude-code",
     "claude-skills",
     "app-clone",

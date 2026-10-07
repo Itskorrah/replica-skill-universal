@@ -12,6 +12,27 @@ description: >-
 
 # replica-test
 
+## Running on any agent
+
+Use this skill with the host's native skill loader, or read this `SKILL.md`
+explicitly. References such as `/replica-design` name another skill: use its
+native invocation (for example `$replica-design` in Codex), or load that
+sibling's `SKILL.md`. They are not shell commands. Continue stages only within
+the user's requested scope.
+
+Keep the working directory at the user's app project. All `replica/` paths
+refer to that project; templates and Python scripts belong to the skill pack.
+In command examples, replace `<PACK_ROOT>` with the absolute directory
+containing the eleven `replica-*` skill folders (the parent of this skill's
+folder). Keep script paths quoted. Use an available Python 3.8+ interpreter:
+`python`, `python3`, or `py -3` on Windows. Create output directories first.
+
+Use the host's available file, terminal, web and browser tools. If a required
+capability is unavailable, record what was not run and provide the concrete
+manual step; never invent observations, screenshots, reviews or passing tests.
+A chat without file/terminal access can follow the method but cannot execute
+the Python tools. Preserve the rules and user approval gates below.
+
 Reads the flows in `replica/recon.md`. Writes `replica/test-plan.md`,
 `replica/bugs.md`, and end-to-end tests in the project (`e2e/`). Templates in
 this folder: `test-plan.md`, `bug-report.md`, `e2e.example.spec.ts`.
@@ -45,7 +66,8 @@ Use roles and labels for selectors (`getByRole('button', { name: 'Book' })`),
 never CSS classes. See `e2e.example.spec.ts`.
 
 ```bash
-npm i -D @playwright/test && npx playwright install chromium
+npm i -D @playwright/test
+npx playwright install chromium
 npx playwright test
 ```
 
