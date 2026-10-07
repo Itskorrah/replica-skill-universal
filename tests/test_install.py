@@ -18,7 +18,8 @@ installer = load("scripts", "install")
 class Install(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix="replica test ")
-        self.base = Path(self.temp.name)
+        # macOS /var is a system symlink; exercise an ordinary canonical path.
+        self.base = Path(self.temp.name).resolve()
         self.project = self.base / "app project"
         self.project.mkdir()
         self.dest = self.project / ".agents/skills"
