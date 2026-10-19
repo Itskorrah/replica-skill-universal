@@ -25,6 +25,16 @@ listing, and put it live on your domain.
 clean-room style. Not its code, its logo, its copy or its content. The
 fine print is at the bottom, and the skills enforce it.
 
+## Use with Codex — copy-and-paste workflows
+
+Open your **target project** in Codex and paste the prompt. It will set up or reuse the relevant capability, **verify** integration and start its real workflow. Any required input or product-specific approval remains yours.
+
+```text
+In my current Codex project, set up and use https://github.com/Itskorrah/replica-skill-universal. Read the upstream README, AGENTS instructions where present and prompts/codex/setup-and-run.md. Check existing skills and Git state, favour project-local installation and preserve customisations. Install its eleven skills, tools and templates into the current application project using the supported Python installer (`python scripts/install.py install --host codex --project TARGET` from a reviewed checkout). Verify the actual installed `SKILL.md` files and compatibility docs; then invoke the correct replica workflow for an explicitly named application. Begin with requirements, legal clean-room research, feature inventory and a scoped implementation plan, and implement/test only the authorised scope. If no target application is specified, complete verified setup and ask for the target rather than inventing one. Preserve clean-room boundaries: do not reuse proprietary application source, protected branding, copied copy, credentials or private assets. Do not silently deploy or purchase services. Native/host activation requires actual evidence. Verify locally; for approved scoped changes commit, push, open a PR and merge where permitted, without bypassing security or required reviews. Do not rely on GitHub Actions. Report results and blockers.
+```
+
+Further copyable prompts: [full setup and run](prompts/codex/setup-and-run.md) · [update](prompts/codex/update.md) · [resume](prompts/codex/resume.md) · [extended autonomous](prompts/codex/autonomous.md).
+
 ## Install
 
 Clone this fork, then run the standard-library Python installer. These commands
